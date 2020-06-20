@@ -11,6 +11,10 @@
                     <todo v-for="todo in usualTodos"
                           :key="todo.id"
                           :todo="todo"
+                          @complete="complete"
+                          @urgent="urgent"
+                          @update="update"
+                          @delete="deleteTodo"
                     ></todo>
                 </ul>
             </div>
@@ -22,6 +26,10 @@
                     <todo v-for="todo in urgentTodos"
                           :key="todo.id"
                           :todo="todo"
+                          @complete="complete"
+                          @urgent="urgent"
+                          @update="update"
+                          @delete="deleteTodo"
                     ></todo>
                 </ul>
             </div>
@@ -53,10 +61,87 @@
         },
 
         methods: {
+            /**
+             * separates todos into two groups: usual and urgent
+             **/
             updateLists(){
                 if (this.todoList.length) {
                     this.usualTodos = this.todoList.filter(todo => !todo.urgent).sort(todo => todo.completed ? 1 : -1);
                     this.urgentTodos = this.todoList.filter(todo => todo.urgent).sort(todo => todo.completed ? 1 : -1);
+                }
+            },
+            /**
+             * toggle todo complete
+             * @param todo
+             */
+            complete(todo) {
+                this.todoList = this.todoList.map(t => {
+                    if (t.id === todo.id) {
+                        t.completed = !t.completed;
+                    }
+
+                    return t;
+                });
+
+                this.$http.post(this.route('todo.update', todo.id), todo).then(() => {
+                    this.updateLists();
+                });
+            },
+            /**
+             * toggle todo urgent
+             * @param todo
+             */
+            urgent(todo){
+                this.todoList = this.todoList.map(t => {
+                    if (t.id === todo.id) {
+                        t.urgent = !t.urgent;
+                    }
+
+                    return t;
+                });
+
+                this.$http.post(this.route('todo.update', todo.id), todo).then(({data}) => {
+                    if (!data.error) {
+                        this.updateLists();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                });
+            },
+            /**
+             * update todo text
+             * @param todo
+             * @param text
+             */
+            update(todo, text) {
+                this.todoList = this.todoList.map(t => {
+                    if (t.id === todo.id) {
+                        t.text = text;
+                    }
+
+                    return t;
+                });
+
+                this.$http.post(this.route('todo.update', todo.id), todo).then(({data}) => {
+                    if (!data.error) {
+                        this.updateLists();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                });
+            },
+            /**
+             * delete todo
+             * @param todo
+             */
+            deleteTodo(todo){
+                let index = this.todoList.findIndex(t => t.id === todo.id);
+
+                if (index > -1) {
+                    this.$http.post(this.route('todo.delete', todo.id), todo).then(() => {
+                        this.$delete(this.todoList, index);
+                        this.updateLists();
+                    });
                 }
             }
         },

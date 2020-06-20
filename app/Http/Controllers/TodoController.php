@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\{Todo, User};
 use Illuminate\Http\Request;
 
 class TodoController extends Controller
@@ -43,7 +43,27 @@ class TodoController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        /**
+         * @var Todo $todo
+         */
+        $todo = $request->attributes->get('todo');
+
+        try {
+            $todo->update(
+                $request->all($todo->getFillable())
+            );
+
+            $todo->save();
+        } catch (\Exception $exception) {
+            return response()->json([
+                'error' => true,
+                'message' => $exception->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'error' => false
+        ]);
     }
 
     /**
@@ -54,6 +74,22 @@ class TodoController extends Controller
      */
     public function destroy(Request $request)
     {
-        //
+        /**
+         * @var Todo $todo
+         */
+        $todo = $request->attributes->get('todo');
+
+        try {
+            $todo->delete();
+        } catch (\Exception $exception) {
+            return response()->json([
+                'error' => true,
+                'message' => $exception->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'error' => false
+        ]);
     }
 }

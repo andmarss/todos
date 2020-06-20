@@ -7,8 +7,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'todo', 'as' => 'todo.'], func
 
     Route::post('/create', 'TodoController@store')->name('create');
 
-    Route::post('/update/{id}', 'TodoController@update')->name('update');
-    Route::post('/delete/{id}', 'TodoController@destroy')->name('delete');
+    Route::middleware('check.todo')->group(function (){
+        Route::post('/update/{id}', 'TodoController@update')->name('update');
+        Route::post('/delete/{id}', 'TodoController@destroy')->name('delete');
+    });
 });
 
 Route::group(['middleware' => 'guest'], function () {
