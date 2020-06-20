@@ -16,6 +16,7 @@
                           @update="update"
                           @delete="deleteTodo"
                     ></todo>
+                    <create-todo @create="create" />
                 </ul>
             </div>
             <div class="col">
@@ -40,6 +41,7 @@
 <script>
     import Methods from '../mixins/methods';
     import Todo from './Todo';
+    import CreateTodo from './CreateTodo';
 
     export default {
         mixins: [Methods],
@@ -143,6 +145,21 @@
                         this.updateLists();
                     });
                 }
+            },
+            /**
+             * Creating todo
+             * @param todo
+             */
+            create(todo){
+                this.$http.post(this.route('todo.create'), todo).then(({data}) => {
+                    if (!data.error) {
+                        this.todoList.push(data.todo);
+
+                        this.updateLists();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                });
             }
         },
 
@@ -157,7 +174,8 @@
         },
 
         components: {
-            todo: Todo
+            todo: Todo,
+            createTodo: CreateTodo
         }
     }
 </script>

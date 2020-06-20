@@ -32,7 +32,26 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            /**
+             * @var Todo $todo
+             */
+            $todo = new Todo();
+
+            $todo = Todo::query()->create(
+                $request->all($todo->getFillable())
+            );
+
+            return response()->json([
+                'error' => false,
+                'todo'  => $todo
+            ]);
+        } catch (\Exception $exception) {
+            return response()->json([
+                'error' => true,
+                'message' => $exception->getMessage()
+            ]);
+        }
     }
 
     /**
