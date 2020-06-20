@@ -18,3 +18,7 @@ Route::group(['middleware' => 'guest'], function () {
         return redirect()->route('login');
     })->name('index');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
