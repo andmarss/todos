@@ -2,9 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+
+/**
+ * Class User
+ * @package App\Models
+ *
+ * @property int $id
+ * @property string $email
+ * @property Collection $todos
+ */
 
 class User extends Authenticatable
 {
