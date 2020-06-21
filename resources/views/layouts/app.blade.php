@@ -9,8 +9,8 @@
     <title>@yield('title')</title>
 
     @yield('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 </head>
 <body>
     <div id="app">
@@ -71,7 +71,6 @@
     </div>
 
     <script src="https://use.fontawesome.com/a1ec3b6463.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script>
         window.site = {!! json_encode([
         'baseUrl' => url('/'),
@@ -82,6 +81,7 @@
     ]) !!}
     </script>
     <script src="{{asset('js/app.js')}}?t={{time()}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     @yield('scripts')
 </body>
 </html>
