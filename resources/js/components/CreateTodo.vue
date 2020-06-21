@@ -38,7 +38,7 @@
              * if text.length === 0 - dont creating
              */
             createTodo(){
-                if (!this.todo.text.length) return;
+                if (!this.todo.text.trim().length) return;
 
                 this.$emit('create', this.todo);
 
