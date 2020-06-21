@@ -70,6 +70,9 @@
                 if (this.todoList.length) {
                     this.usualTodos = this.todoList.filter(todo => !todo.urgent).sort(todo => todo.completed ? 1 : -1);
                     this.urgentTodos = this.todoList.filter(todo => todo.urgent).sort(todo => todo.completed ? 1 : -1);
+                } else {
+                    this.usualTodos = [];
+                    this.urgentTodos = [];
                 }
             },
             /**
